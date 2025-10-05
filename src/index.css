@@ -1,0 +1,257 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ScanIt Futuristic Design System - Premium AI & Blockchain UI */
+
+@layer base {
+  :root {
+    /* Core Colors - Deep Space & Neon */
+    --background: 240 6% 4%;
+    --foreground: 0 0% 98%;
+
+    /* Glass Panels */
+    --card: 240 6% 8%;
+    --card-foreground: 0 0% 95%;
+
+    /* Popover & Overlays */
+    --popover: 240 8% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Primary - Neon Teal */
+    --primary: 176 85% 65%;
+    --primary-foreground: 240 6% 4%;
+
+    /* Secondary - Deep Blue */
+    --secondary: 220 50% 15%;
+    --secondary-foreground: 0 0% 98%;
+
+    /* Muted Elements */
+    --muted: 240 6% 12%;
+    --muted-foreground: 240 5% 65%;
+
+    /* Accent - Electric Blue */
+    --accent: 217 91% 60%;
+    --accent-foreground: 240 6% 4%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Borders & Inputs */
+    --border: 240 6% 20%;
+    --input: 240 6% 12%;
+    --ring: 176 85% 65%;
+
+    /* Glass & Effects */
+    --glass-background: 240 6% 8% / 0.8;
+    --glass-border: 240 6% 25% / 0.3;
+    --neon-glow: 176 85% 65% / 0.4;
+    --neural-pulse: 217 91% 60% / 0.6;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(220 50% 15%) 0%, hsl(176 85% 65%) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(240 6% 8% / 0.9) 0%, hsl(240 6% 12% / 0.7) 100%);
+    --gradient-neural: linear-gradient(45deg, hsl(217 91% 60% / 0.2) 0%, hsl(176 85% 65% / 0.2) 100%);
+
+    /* Shadows & Glows */
+    --shadow-glass: 0 8px 32px hsl(240 6% 4% / 0.4);
+    --shadow-neon: 0 0 20px hsl(176 85% 65% / 0.3);
+    --shadow-neural: 0 4px 20px hsl(217 91% 60% / 0.2);
+
+    /* Border Radius */
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Futuristic Animations & Effects */
+  @keyframes neural-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  @keyframes neon-glow {
+    0%, 100% { box-shadow: 0 0 10px hsl(var(--primary) / 0.3); }
+    50% { box-shadow: 0 0 30px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.4); }
+  }
+
+  @keyframes blockchain-flow {
+    0% { transform: translateX(-100px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(100vw); opacity: 0; }
+  }
+
+  @keyframes scanner-sweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes hologram-flicker {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Glass Panel Component */
+  .glass-panel {
+    background: var(--gradient-glass);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Neon Border Effect */
+  .neon-border {
+    position: relative;
+    border: 1px solid hsl(var(--primary) / 0.3);
+  }
+
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: var(--gradient-primary);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .neon-border:hover::before {
+    opacity: 0.7;
+  }
+
+  /* Neural Network Background */
+  .neural-background {
+    background: var(--gradient-neural);
+    animation: neural-pulse 3s ease-in-out infinite;
+  }
+
+  /* Blockchain Block Effect */
+  .blockchain-block {
+    background: var(--gradient-glass);
+    border: 1px solid hsl(var(--accent) / 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .blockchain-block:hover {
+    border-color: hsl(var(--accent) / 0.8);
+    box-shadow: var(--shadow-neural);
+    transform: translateY(-2px);
+  }
+
+  /* Scanner Animation */
+  .scanner-line {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(var(--primary) / 0.8) 50%, 
+      transparent 100%
+    );
+    animation: scanner-sweep 2s ease-in-out;
+  }
+
+  /* Holographic Text Effect */
+  .holographic-text {
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hologram-flicker 2s ease-in-out infinite;
+  }
+
+  /* Base Styles */
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Smooth Scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.6);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.8);
+  }
+}
