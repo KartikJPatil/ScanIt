@@ -14,6 +14,7 @@ import ModelDetails from "./pages/ModelDetails";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import ReportDetails from "./pages/ReportDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,11 @@ const App = () => (
             <Route path="/reports" element={
               <AuthGuard>
                 <Reports />
+              </AuthGuard>
+            } />
+            <Route path="/reports/:id" element={
+              <AuthGuard>
+                <ReportDetails />
               </AuthGuard>
             } />
             <Route path="/explorer" element={<BlockchainExplorer />} />

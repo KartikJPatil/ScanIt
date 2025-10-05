@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Blocks, Search, Clock, Hash, User, Zap } from "lucide-react";
+import { Blocks, Search, Clock, Hash, User, Zap, Upload, ArrowRight } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Block {
-  id: number;
+  id: string;
   hash: string;
   timestamp: string;
   verifier: string;
@@ -15,36 +17,63 @@ interface Block {
   status: "confirmed" | "pending";
 }
 
-const mockBlocks: Block[] = [
-  {
-    id: 12547,
-    hash: "0xa1b2c3d4e5f6789012345678901234567890abcd",
-    timestamp: "2024-01-15T10:30:00Z",
-    verifier: "ScanIt Node Alpha",
-    transactions: 42,
-    status: "confirmed"
-  },
-  {
-    id: 12546,
-    hash: "0xb2c3d4e5f6789012345678901234567890abcde1",
-    timestamp: "2024-01-15T10:25:00Z",
-    verifier: "ScanIt Node Beta",
-    transactions: 38,
-    status: "confirmed"
-  },
-  {
-    id: 12545,
-    hash: "0xc3d4e5f6789012345678901234567890abcde12f",
-    timestamp: "2024-01-15T10:20:00Z",
-    verifier: "ScanIt Node Gamma",
-    transactions: 51,
-    status: "pending"
-  }
-];
+interface VerificationData {
+  id: string;
+  content: string;
+  is_ai_generated: boolean;
+  confidence: number;
+  blockchain_hash: string;
+  created_at: string;
+  user_id: string;
+}
 
 export default function BlockchainExplorer() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBlock, setSelectedBlock] = useState<Block | null>(null);
+  const [userBlocks, setUserBlocks] = useState<Block[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      loadUserVerifications();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
+
+  const loadUserVerifications = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('verifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading verifications:', error);
+        return;
+      }
+
+      // Convert verifications to blocks
+      const blocks: Block[] = (data || []).map((verification: VerificationData, index) => ({
+        id: verification.id,
+        hash: verification.blockchain_hash || `0x${Math.random().toString(16).substring(2, 42)}`,
+        timestamp: verification.created_at,
+        verifier: `ScanIt Node ${String.fromCharCode(65 + (index % 3))}`,
+        transactions: 1,
+        status: "confirmed" as const,
+      }));
+
+      setUserBlocks(blocks);
+    } catch (error) {
+      console.error('Error loading user verifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,10 +87,10 @@ export default function BlockchainExplorer() {
               <Blocks className="w-8 h-8 text-primary-foreground" />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              <span className="holographic-text">Blockchain Explorer</span>
+              <span className="holographic-text">Your Verifications</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore the immutable ledger of content authenticity verifications
+              Track your content authenticity verifications on the blockchain
             </p>
           </div>
 
@@ -79,12 +108,51 @@ export default function BlockchainExplorer() {
           </Card>
 
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Blockchain Grid */}
+            {/* User's Verifications */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold mb-6">Recent Blocks</h2>
+              <h2 className="text-2xl font-bold mb-6">Your Verifications</h2>
               
-              <div className="space-y-4">
-                {mockBlocks.map((block, index) => (
+              {loading ? (
+                <Card className="glass-panel p-12 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted/50 mb-6">
+                    <Blocks className="w-8 h-8 text-muted-foreground animate-pulse" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Loading Verifications...</h3>
+                  <p className="text-muted-foreground">
+                    Fetching your verification history from the blockchain
+                  </p>
+                </Card>
+              ) : !user ? (
+                <Card className="glass-panel p-12 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted/50 mb-6">
+                    <User className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Login Required</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    Please log in to view your verification history and blockchain records
+                  </p>
+                  <Button className="group">
+                    Go to Login
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Card>
+              ) : userBlocks.length === 0 ? (
+                <Card className="glass-panel p-12 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted/50 mb-6">
+                    <Upload className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">No Verifications Yet</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    Start by scanning your first piece of content to see it appear in your verification history
+                  </p>
+                  <Button className="group">
+                    Go to Scanner
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Card>
+              ) : (
+                <div className="space-y-4">
+                  {userBlocks.map((block, index) => (
                   <Card 
                     key={block.id} 
                     className={`blockchain-block p-6 cursor-pointer animate-fade-in ${
@@ -130,6 +198,7 @@ export default function BlockchainExplorer() {
                   </Card>
                 ))}
               </div>
+              )}
             </div>
 
             {/* Block Details */}
@@ -210,7 +279,14 @@ export default function BlockchainExplorer() {
                 <Card className="glass-panel p-12 text-center">
                   <Blocks className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">
-                    Select a block to view detailed information
+                    {loading 
+                      ? "Loading verification details..."
+                      : !user
+                      ? "Login to view your verification blocks"
+                      : userBlocks.length === 0 
+                      ? "Start scanning content to see your verification blocks here"
+                      : "Select a block to view detailed information"
+                    }
                   </p>
                 </Card>
               )}

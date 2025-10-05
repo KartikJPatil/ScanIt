@@ -200,7 +200,12 @@ export default function Reports() {
                         </div>
                       </div>
                       
-                      <Button variant="outline" size="sm" className="border-primary/30">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="border-primary/30"
+                        onClick={() => navigate(`/reports/${report.id}`)}
+                      >
                         <Eye className="w-4 h-4 mr-2" />
                         View Details
                       </Button>
